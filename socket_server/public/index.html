@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Web Sockets!!</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.css">
+</head>
+
+<body>
+  <!--[if lte IE 9]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  <![endif]-->
+
+  <!-- Add your site or application content here -->
+
+    <section class="hero is-fullheight">
+        <div class="hero-body box">
+            <div class="container">
+                <div class="tile is-ancestor">
+                    <div class="tile is-parent">
+                        <div class="tile is-child">
+                            <p class="subtitle is-1">Chat Room</p>
+                            <ul id="messages"></ul>
+                            <div id="feedback" class="has-text-info"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-foot">
+            <div class="container">
+                    <div class="columns is-multiline is-centered">
+                        <div class="column is-3">
+                            <div class="field">
+                                    <div class="control">
+                                            <input type="text" class="input" id="sender">
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="column is-5">
+                                <div class="field">
+                                        <div class="control">
+                                                <input type="text" class="input" id="m">
+                                        </div>
+                                </div>
+                            </div>
+                        <div class="column">
+                                <button class="button is-success" id="btn">
+                                        Send
+                                </button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/chat.js"></script>
+</body>
+
+</html>
