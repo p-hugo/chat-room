@@ -10,7 +10,7 @@ function getAccess(context) {
     return (
       <>
         <Messages />
-        <Input typing={ context.typing } onEnter={ context.addMessage }/>
+        <Input typing={ context.typing } onEnter={ context.addMessage } minLength={1}/>
       </>
     );
   }

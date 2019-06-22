@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import InputPresenter from "./Input.presenter";
 import PropTypes from "prop-types";
 
-export default function Input({ onEnter, placeholder, typing }) {
+export default function Input({ onEnter, placeholder, typing, minLength}) {
   const [value, setValue] = useState("");
 
   const handleChange = ({ target }) => {
@@ -14,7 +14,7 @@ export default function Input({ onEnter, placeholder, typing }) {
   };
 
   const handleKeyPress = ({ key }) => {
-    if (key === `Enter`) {
+    if (key === `Enter` && value.length >= minLength) {
       onEnter(value);
       setValue("");
     }
@@ -35,3 +35,7 @@ Input.propTypes = {
     placeholder: PropTypes.string,
     typing: PropTypes.func
 }
+
+Input.defaultProps = {
+  minLength: 4
+};
