@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import io from 'socket.io-client';
 import 'bulma/css/bulma.css';
 import './css/custom.css';
-import Messages from "./Components/Messages";
+// import Messages from "./Components/Messages";
 require('dotenv').config();
 
 class App extends Component {
@@ -122,7 +122,7 @@ class App extends Component {
                             <div className="tile is-parent">
                                 <div className="tile is-child">
                                     <p className="subtitle is-1">Socket.io messaging</p>
-                                    <Messages messages={messages} feedback={feedback} handleRef={this.handleRef}/>
+                                    {/*<Messages messages={messages} feedback={feedback} handleRef={this.handleRef}/>*/}
                                 </div>
 
                             </div>
