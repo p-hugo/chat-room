@@ -1,9 +1,9 @@
-import React, { useContext } from "./node_modules/react";
-import { MessageContext } from "../Context";
-import MessageContainer from "../Components/Message/Message.container";
-import Input from "../Components/Input";
-import WelcomeScreen from "../Components/WelcomeScreen";
-import Wrapper from "../Components/Layouts/Wrapper";
+import React, { useContext } from "react";
+import { MessageContext } from "../context";
+import MessageContainer from "../components/Message/Message.container";
+import Input from "../components/Input";
+import WelcomeScreen from "../components/WelcomeScreen";
+import Wrapper from "../components/Layouts/Wrapper";
 
 function getAccess(context) {
   if (context.state.user) {

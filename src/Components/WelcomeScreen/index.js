@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { MessageContext } from "../../Context/";
+import { MessageContext } from "../../context/";
 import Input from "../Input";
 
 export default function() {
