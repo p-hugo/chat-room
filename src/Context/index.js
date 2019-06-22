@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import io from 'socket.io-client';
+import React, {Component} from './node_modules/react';
+import io from './node_modules/socket.io-client';
 // Step 1: Create the context
 const MessageContext = React.createContext();
 

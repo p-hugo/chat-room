@@ -1,4 +1,4 @@
-import React from 'react';
+import React from './node_modules/react';
 //pass in an array of messages and feedback user if it exist
 const Messages = ({messages, feedback, handleRef}) =>
    <>

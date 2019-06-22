@@ -1,37 +1,17 @@
-import React, {Component} from 'react';
-import Wrapper from "./Components/Layouts/Wrapper";
-import {MessageProvider, MessageContext} from "./Context";
-import MessageContainer from "./Components/Message/Message.container";
-import Input from "./Components/Input";
-import WelcomeScreen from "./Components/WelcomeScreen";
+import React from "react";
+import { Router } from "@reach/router";
+import { MessageProvider } from "./Context";
+import Home from "./Pages/Home";
 // import './css/debug.css';
 
-require('dotenv').config();
+require("dotenv").config();
 
-class App extends Component {
-
-    render() {
-        return (
-            <MessageProvider>
-                <Wrapper>
-                    <MessageContext.Consumer>
-                        { context => context.state.user ?
-                            (
-                                <>
-                                    <MessageContainer
-                                        user={context.state.user}
-                                        incomingMessage={context.incomingMessage}
-                                    />
-                                    <Input typing={context.typing}/>
-                                </>
-                            ) :
-                            (<WelcomeScreen setName={ context.setName }/>)
-                        }
-                    </MessageContext.Consumer>
-                </Wrapper>
-            </MessageProvider>
-        );
-    }
+export default function() {
+  return (
+    <MessageProvider>
+      <Router>
+          <Home path="/" />
+      </Router>
+    </MessageProvider>
+  );
 }
-
-export default App;

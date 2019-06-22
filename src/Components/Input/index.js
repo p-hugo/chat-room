@@ -1,10 +1,37 @@
-import React from 'react';
-import {MessageContext} from '../../Context';
-import InputContainer from "./Input.container";
-const Input = ({typing}) => (
-    <MessageContext.Consumer>
-        {context => <InputContainer onEnter={context.addMessage} typing={typing} />}
-    </MessageContext.Consumer>
-);
+import React, { useState } from "react";
+import InputPresenter from "./Input.presenter";
+import PropTypes from "prop-types";
 
-export default Input;
+export default function Input({ onEnter, placeholder, typing }) {
+  const [value, setValue] = useState("");
+
+  const handleChange = ({ target }) => {
+    setValue(target.value);
+    // If typing callback available, fire it!
+    if (typing) {
+      typing();
+    }
+  };
+
+  const handleKeyPress = ({ key }) => {
+    if (key === `Enter`) {
+      onEnter(value);
+      setValue("");
+    }
+  };
+
+  return (
+    <InputPresenter
+      value={value}
+      handleChange={handleChange}
+      handleKeyPress={handleKeyPress}
+      placeholder={placeholder}
+    />
+  );
+}
+
+Input.propTypes = {
+    onEnter: PropTypes.func,
+    placeholder: PropTypes.string,
+    typing: PropTypes.func
+}
