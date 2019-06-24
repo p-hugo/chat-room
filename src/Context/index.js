@@ -16,12 +16,17 @@ class MessageProvider extends Component {
     };
   }
 
+  offlineHandler = ev => {
+    ev.preventDefault();
+    this.socket.emit("end", { id: this.state.id, user: this.state.user });
+  };
+
   componentDidMount() {
-    // Before tab closes signal server
-    window.addEventListener("beforeunload", ev => {
-      ev.preventDefault();
-      this.socket.emit("end", { id: this.state.id, user: this.state.user });
-    });
+    window.addEventListener("beforeunload", this.offlineHandler);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("beforeunload", this.offlineHandler);
   }
 
   addMessage = message => {
@@ -31,9 +36,7 @@ class MessageProvider extends Component {
     });
   };
 
-  // This is when the user succesfully enter his/her name for the first time
-  setName = user => {
-    this.setState({ user });
+  subscribe = user => {
     // socket is created
     this.socket = io(process.env.REACT_APP_URL);
 
@@ -79,6 +82,13 @@ class MessageProvider extends Component {
       this.setState({
         connected: update_connected
       });
+    });
+  };
+
+  // This is when the user succesfully enter his/her name for the first time
+  setName = user => {
+    this.setState({ user }, () => {
+      this.subscribe(user);
     });
   };
 
