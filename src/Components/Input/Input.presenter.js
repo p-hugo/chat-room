@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components'
-import style from './Input.module.scss';
+import React from "react";
+import styled from "styled-components";
+import style from "./Input.module.scss";
 const CustomInput = styled.input`
   font-size: 16px;
   min-width: 60%;
@@ -13,15 +13,21 @@ const CustomInput = styled.input`
   justify-self: center;
 `;
 
-const InputPresenter = ({value, handleChange, handleKeyPress, placeholder, noClass}) => (
-    <CustomInput
-        type="text"
-        placeholder={placeholder ? placeholder : "Type a message"}
-        className={noClass ? null : style.blue_input}
-        value={value}
-        onChange={handleChange}
-        onKeyPress={handleKeyPress}
-    />
+const InputPresenter = ({
+  value,
+  handleChange,
+  handleKeyPress,
+  placeholder,
+  noClass,
+}) => (
+  <CustomInput
+    type="text"
+    placeholder={placeholder ? placeholder : "Type a message"}
+    className={noClass ? null : style.blue_input}
+    value={value}
+    onChange={handleChange}
+    onKeyPress={handleKeyPress}
+  />
 );
 
 export default InputPresenter;
