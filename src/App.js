@@ -1,5 +1,5 @@
 import React from "react";
-import { Router } from "@reach/router";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { MessageProvider } from "./Context";
 import Home from "./pages/Home";
 // import './css/debug.css';
@@ -10,7 +10,7 @@ export default function () {
   return (
     <MessageProvider>
       <Router>
-        <Home path="/" />
+        <Route exact={true} path="/" component={Home} />
       </Router>
     </MessageProvider>
   );
