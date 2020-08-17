@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { MessageContext } from "../../context/";
+import { MessageContext } from "../../Context/";
 import Input from "../Input";
 
-export default function() {
+export default function () {
   const { setName } = useContext(MessageContext);
   return (
     <section id="Login">

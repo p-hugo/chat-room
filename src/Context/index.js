@@ -12,11 +12,11 @@ class MessageProvider extends Component {
       user: "",
       id: null,
       typing: null,
-      connected: []
+      connected: [],
     };
   }
 
-  offlineHandler = ev => {
+  offlineHandler = (ev) => {
     ev.preventDefault();
     this.socket.emit("end", { id: this.state.id, user: this.state.user });
   };
@@ -29,14 +29,14 @@ class MessageProvider extends Component {
     window.removeEventListener("beforeunload", this.offlineHandler);
   }
 
-  addMessage = message => {
+  addMessage = (message) => {
     this.socket.emit("chat", {
       message,
-      sender: this.state.user
+      sender: this.state.user,
     });
   };
 
-  subscribe = user => {
+  subscribe = (user) => {
     // socket is created
     this.socket = io(process.env.REACT_APP_URL);
 
@@ -51,50 +51,50 @@ class MessageProvider extends Component {
     this.socket.emit("connected", user);
 
     //Subscribe to chat events
-    this.socket.on("chat", data => {
+    this.socket.on("chat", (data) => {
       this.setState({
         messages: [
           ...this.state.messages,
-          { sender: data.sender, content: data.message }
-        ]
+          { sender: data.sender, content: data.message },
+        ],
       });
     });
 
     // Subscribe to typing events
-    this.socket.on("typing", user => {
+    this.socket.on("typing", (user) => {
       //set feedback to true and display name
       this.setState({
-        typing: user
+        typing: user,
       });
     });
 
     //subscribe to people present in the chat
-    this.socket.on("connected", user => {
-      this.setState(prevState => ({
-        connected: [...prevState.connected, user]
+    this.socket.on("connected", (user) => {
+      this.setState((prevState) => ({
+        connected: [...prevState.connected, user],
       }));
     });
 
     //subscribe to people leaving
-    this.socket.on("end", user => {
+    this.socket.on("end", (user) => {
       const { connected } = this.state;
-      let update_connected = connected.filter(val => val !== user);
+      let update_connected = connected.filter((val) => val !== user);
       this.setState({
-        connected: update_connected
+        connected: update_connected,
       });
     });
   };
 
   // This is when the user succesfully enter his/her name for the first time
-  setName = user => {
+  setName = (user) => {
     this.setState({ user }, () => {
       this.subscribe(user);
     });
   };
 
-  incomingMessage = message => {
-    this.setState(prevState => ({
-      messages: [prevState.messages, message]
+  incomingMessage = (message) => {
+    this.setState((prevState) => ({
+      messages: [prevState.messages, message],
     }));
   };
 
@@ -110,7 +110,7 @@ class MessageProvider extends Component {
           addMessage: this.addMessage,
           setName: this.setName,
           incomingMessage: this.incomingMessage,
-          typing: this.typing
+          typing: this.typing,
         }}
       >
         {this.props.children}
