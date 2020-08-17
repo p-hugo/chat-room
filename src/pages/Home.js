@@ -1,27 +1,26 @@
 import React, { useContext } from "react";
-import { MessageContext } from "../Context";
-import Messages from "../Components/Messages/";
+import { MessageContext } from "../Context/";
 import Input from "../Components/Input";
-import WelcomeScreen from "../Components/WelcomeScreen";
-import Wrapper from "../Components/Layouts/Wrapper";
+import { useHistory } from "react-router-dom";
 
-function getAccess(context) {
-  if (context.state.user) {
-    return (
-      <>
-        <Messages />
-        <Input
-          typing={context.typing}
-          onEnter={context.addMessage}
-          minLength={1}
-        />
-      </>
-    );
-  }
-  return <WelcomeScreen />;
+function Home() {
+  const { setName } = useContext(MessageContext);
+  const history = useHistory();
+  const handleOnEnter = (val) => {
+    setName(val);
+    history.push("/chat-room");
+  };
+  return (
+    <section id="Login">
+      <h1>
+        Hello there, before you enter the chat please tell us your name{" "}
+        <span role="img" aria-label="Smily face">
+          😊
+        </span>
+      </h1>
+      <Input onEnter={handleOnEnter} placeholder="Spongebob Squarepants" />
+    </section>
+  );
 }
 
-export default function () {
-  const context = useContext(MessageContext);
-  return <Wrapper>{getAccess(context)}</Wrapper>;
-}
+export default Home;
