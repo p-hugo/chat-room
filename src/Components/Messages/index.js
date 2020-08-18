@@ -9,9 +9,9 @@ const config = {
 };
 
 export default function Messages() {
-  const { state } = useContext(MessageContext);
+  const { messages } = useContext(MessageContext);
 
-  const messageList = state.messages.map((message, cnt) => (
+  const messageList = messages.map((message, cnt) => (
     <Message
       sender={message.sender}
       content={message.content}

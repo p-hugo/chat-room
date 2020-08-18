@@ -6,10 +6,9 @@ import Home from "./pages/Home";
 import ChatRoom from "./pages/ChatRoom";
 
 // import './css/debug.css';
-
 require("dotenv").config();
 
-export default function () {
+export default function App() {
   return (
     <MessageProvider>
       <Wrapper>
@@ -20,20 +19,21 @@ export default function () {
       </Wrapper>
     </MessageProvider>
   );
-}
 
-function ProtectedRoute({ children, ...rest }) {
-  const context = useContext(MessageContext);
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        context.state.user ? (
-          children
-        ) : (
-          <Redirect to={{ pathname: "/", state: { from: location } }} />
-        )
-      }
-    />
-  );
+  function ProtectedRoute({ component: Component, ...rest }) {
+    const { user } = useContext(MessageContext);
+
+    return (
+      <Route
+        {...rest}
+        render={({ location }) =>
+          user ? (
+            <Component />
+          ) : (
+            <Redirect to={{ pathname: "/", state: { from: location } }} />
+          )
+        }
+      />
+    );
+  }
 }

@@ -1,121 +1,67 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import io from "socket.io-client";
+import useChatReducer from "./useChatReducer";
+
 // Step 1: Create the context
-const MessageContext = React.createContext();
+let MessageContext;
+const { Provider } = (MessageContext = React.createContext());
 
-// Step 2: Create a provider
-class MessageProvider extends Component {
-  constructor() {
-    super();
-    this.state = {
-      messages: [],
-      user: "",
-      id: null,
-      typing: null,
-      connected: [],
+// Set the socket connection
+const socket = io(process.env.REACT_APP_URL);
+
+function MessageProvider({ children }) {
+  const {
+    state,
+    newMessage,
+    setTyping,
+    initialConnect,
+    newConnection,
+    removeConnection,
+  } = useChatReducer(socket);
+  // Effect for when the user leaves the chat
+  useEffect(() => {
+    function offlineHandler(ev) {
+      ev.preventDefault();
+      socket.emit("end", { id: state.id, user: state.user });
+    }
+
+    window.addEventListener("beforeunload", offlineHandler);
+    return () => {
+      window.removeEventListener("beforeunload", offlineHandler);
     };
-  }
+  });
 
-  offlineHandler = (ev) => {
-    ev.preventDefault();
-    this.socket.emit("end", { id: this.state.id, user: this.state.user });
-  };
-
-  componentDidMount() {
-    window.addEventListener("beforeunload", this.offlineHandler);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("beforeunload", this.offlineHandler);
-  }
-
-  addMessage = (message) => {
-    this.socket.emit("chat", {
-      message,
-      sender: this.state.user,
-    });
-  };
-
-  subscribe = (user) => {
-    // socket is created
-    this.socket = io(process.env.REACT_APP_URL);
-
-    // listen for the initial emitted message from server, this brings
-    // the current set of people connected and an id to be assigned for
-    // reference
-    this.socket.on("initial", ({ id, connected }) => {
-      this.setState({ id, connected });
-    });
-
-    // let others know you have joined!
-    this.socket.emit("connected", user);
+  // Chat Subscriptions
+  useEffect(() => {
+    // Initial load of people connected
+    socket.on("initial", initialConnect);
 
     //Subscribe to chat events
-    this.socket.on("chat", (data) => {
-      this.setState({
-        messages: [
-          ...this.state.messages,
-          { sender: data.sender, content: data.message },
-        ],
-      });
-    });
+    socket.on("chat", newMessage);
 
     // Subscribe to typing events
-    this.socket.on("typing", (user) => {
-      //set feedback to true and display name
-      this.setState({
-        typing: user,
-      });
+    socket.on("typing", setTyping);
+
+    // Subscribe to people present in the chat
+    socket.on("connected", newConnection);
+
+    // Subscribe to people leaving
+    socket.on("end", removeConnection);
+  }, []);
+
+  return (
+    <Provider value={{ ...state, isTyping, sendMessage }}>{children}</Provider>
+  );
+
+  function isTyping() {
+    socket.emit("typing", state.user);
+  }
+
+  function sendMessage(message) {
+    socket.emit("chat", {
+      message,
+      sender: state.user,
     });
-
-    //subscribe to people present in the chat
-    this.socket.on("connected", (user) => {
-      this.setState((prevState) => ({
-        connected: [...prevState.connected, user],
-      }));
-    });
-
-    //subscribe to people leaving
-    this.socket.on("end", (user) => {
-      const { connected } = this.state;
-      let update_connected = connected.filter((val) => val !== user);
-      this.setState({
-        connected: update_connected,
-      });
-    });
-  };
-
-  // This is when the user succesfully enter his/her name for the first time
-  setName = (user) => {
-    this.setState({ user }, () => {
-      this.subscribe(user);
-    });
-  };
-
-  incomingMessage = (message) => {
-    this.setState((prevState) => ({
-      messages: [prevState.messages, message],
-    }));
-  };
-
-  typing = () => {
-    this.socket.emit("typing", this.state.user);
-  };
-
-  render() {
-    return (
-      <MessageContext.Provider
-        value={{
-          state: this.state,
-          addMessage: this.addMessage,
-          setName: this.setName,
-          incomingMessage: this.incomingMessage,
-          typing: this.typing,
-        }}
-      >
-        {this.props.children}
-      </MessageContext.Provider>
-    );
   }
 }
 
